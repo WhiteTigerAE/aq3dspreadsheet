@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" type="text/css" href="../semantic/dist/semantic.min.css">
+<script src="../js/library/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
+<script src="../js/library/tablesort.js"></script>
+<script src="../semantic/dist/semantic.min.js"></script>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-93927602-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+<script src="../js/aws.min.js"></script>
+<script src="../js/utils.min.js"></script>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.20.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Shoulders Spreadsheet</title>
+</head>
+<body>
+<div style="padding: 20px;">
+    <div class="ui large breadcrumb">
+        <a class="section" href="../">AQ3D Spreadsheet</a>
+        <i class="right angle icon divider"></i>
+        <div class="active section">Shoulders</div>
+    </div>
+    <div id="loadingSpinnerContainer"
+         class="ui active dimmer">
+        <div id="loadingSpinner"
+             class="ui text loader">Loading, please be patient...
+        </div>
+    </div>
+    <table id="spreadsheetTable"
+           class="ui sortable celled table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Level</th>
+            <th>Health</th>
+            <th>Mana</th>
+            <th>Attack</th>
+            <th>Defense</th>
+            <th>Dodge</th>
+            <th>Hit</th>
+            <th>Crit</th>
+            <th>Crit Power</th>
+        </tr>
+        </thead>
+        <tbody id="spreadsheetTableBody">
+        </tbody>
+    </table>
+</div>
+</body>
+<script>
+    $(document).ready(function () {
+        var table = document.getElementById("spreadsheetTable");
+        $(table).tablesort({
+            compare: function (a, b) {
+                function chunkify(t) {
+                    var tz = new Array();
+                    var x = 0, y = -1, n = 0, i, j;
+
+                    while (i = (j = t.charAt(x++)).charCodeAt(0)) {
+                        var m = (i == 46 || (i >= 48 && i <= 57));
+                        if (m !== n) {
+                            tz[++y] = "";
+                            n = m;
+                        }
+                        tz[y] += j;
+                    }
+                    return tz;
+                }
+
+                var aa = chunkify(a.toLowerCase());
+                var bb = chunkify(b.toLowerCase());
+
+                for (x = 0; aa[x] && bb[x]; x++) {
+                    if (aa[x] !== bb[x]) {
+                        var c = Number(aa[x]), d = Number(bb[x]);
+                        if (c == aa[x] && d == bb[x]) {
+                            return c - d;
+                        } else return (aa[x] > bb[x]) ? 1 : -1;
+                    }
+                }
+                return aa.length - bb.length;
+            }
+        });
+
+        var scheduleCycleText = setInterval(function () {
+            document.getElementById("loadingSpinner").innerHTML = getLoadingText();
+        }, 2000);
+        var tableBody = document.getElementById("spreadsheetTableBody");
+        loadData("shoulder", tableBody, function () {
+            $("#loadingSpinnerContainer").removeClass("active");
+            clearInterval(scheduleCycleText);
+        });
+    });
+</script>
+</html>

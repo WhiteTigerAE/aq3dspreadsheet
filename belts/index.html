@@ -92,6 +92,7 @@
             }
         });
 
+        document.getElementById("loadingSpinner").innerHTML = getLoadingText();
         var scheduleCycleText = setInterval(function () {
             document.getElementById("loadingSpinner").innerHTML = getLoadingText();
         }, 2000);

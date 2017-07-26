@@ -21,14 +21,14 @@
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.20.min.js"></script>
 <head>
     <meta charset="UTF-8">
-    <title>Capes Spreadsheet</title>
+    <title>Backs Spreadsheet</title>
 </head>
 <body>
 <div style="padding: 20px;">
     <div class="ui large breadcrumb">
         <a class="section" href="../">AQ3D Spreadsheet</a>
         <i class="right angle icon divider"></i>
-        <div class="active section">Capes</div>
+        <div class="active section">Backs</div>
     </div>
     <div id="loadingSpinnerContainer"
          class="ui active dimmer">
@@ -42,14 +42,9 @@
         <tr>
             <th>Name</th>
             <th>Level</th>
-            <th>Health</th>
-            <th>Mana</th>
-            <th>Attack</th>
-            <th>Defense</th>
-            <th>Dodge</th>
-            <th>Hit</th>
             <th>Crit</th>
-            <th>Crit Power</th>
+            <th>Evasion</th>
+            <th>Haste</th>
         </tr>
         </thead>
         <tbody id="spreadsheetTableBody">
@@ -96,7 +91,7 @@
             document.getElementById("loadingSpinner").innerHTML = getLoadingText();
         }, 2000);
         var tableBody = document.getElementById("spreadsheetTableBody");
-        loadData("cape", tableBody, function () {
+        loadData("back", tableBody, function () {
             $("#loadingSpinnerContainer").removeClass("active");
             clearInterval(scheduleCycleText);
         });
